@@ -2,8 +2,12 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
-  username: String,
-  password: String,
+  username: {type: String, required: true, unique: true},
+  image: String,
+  email: {type: String, required: true, unique: true},
+  occupation: {type: String, required: true, unique: true},
+  portfolio: [{type: Schema.Types.ObjectId, ref: "Project"}],
+  password: {type: String, required: true},
 }, {
   timestamps: {
     createdAt: 'created_at',
