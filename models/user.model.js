@@ -4,8 +4,8 @@ const Schema = mongoose.Schema;
 const userSchema = new Schema({
   username: {type: String, required: true, unique: true},
   image: String,
-  email: {type: String, required: true, unique: true},
   occupation: {type: String, required: true, unique: true},
+  email: {type: String, required: true, unique: true},
   portfolio: [{type: Schema.Types.ObjectId, ref: "Project"}],
   followers: [{type: Schema.Types.ObjectId, ref: "User"}],
   following: [{type: Schema.Types.ObjectId, ref: "User"}],
