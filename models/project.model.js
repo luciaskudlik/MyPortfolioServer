@@ -7,6 +7,8 @@ const projectSchema = new Schema({
     description: {type: String, required: true},
     deployedLink: {type: String, required: true},
     githubLink: {type: String, required: true},
+    likedBy: [{type: Schema.Types.ObjectId, ref: "User"}],
+    comments: [{type: Schema.Types.ObjectId, ref: "Comment"}],
     user: {type: Schema.Types.ObjectId, ref: "User"}
 }, {
   timestamps: {

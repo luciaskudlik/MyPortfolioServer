@@ -7,6 +7,8 @@ const userSchema = new Schema({
   email: {type: String, required: true, unique: true},
   occupation: {type: String, required: true, unique: true},
   portfolio: [{type: Schema.Types.ObjectId, ref: "Project"}],
+  followers: [{type: Schema.Types.ObjectId, ref: "User"}],
+  following: [{type: Schema.Types.ObjectId, ref: "User"}],
   password: {type: String, required: true},
 }, {
   timestamps: {

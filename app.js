@@ -10,6 +10,9 @@ const cors = require('cors');
 require('dotenv').config();
 
 const authRouter = require('./routes/auth.router');
+const userRouter = require('./routes/user.router');
+const projectRouter = require('./routes/project.router');
+const commentRouter = require('./routes/comment.router');
 
 
 // MONGOOSE CONNECTION
@@ -60,6 +63,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // ROUTER MIDDLEWARE
 app.use('/auth', authRouter);
+app.use('/api', userRouter);
+app.use('/api', projectRouter);
+app.use('/api', commentRouter);
+
 
 
 
