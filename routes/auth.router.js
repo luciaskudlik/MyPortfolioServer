@@ -38,15 +38,15 @@ router.post("/upload", uploader.single("image"), (req, res, next) => {
 router.post('/signup', isNotLoggedIn, validationLogin, (req, res, next) => {
   const { username, image, occupation, email, password } = req.body;
 
-  User.findOne({ username })
+  User.findOne({ email })
     .then( (foundUser) => {
 
       if (foundUser) {
-        // If username is already taken, then return error response
+        // If email is already taken, then return error response
         return next( createError(400) ); // Bad Request
       }
       else {
-        // If username is available, go and create a new user
+        // If email is available, go and create a new user
         const salt = bcrypt.genSaltSync(saltRounds);
         const encryptedPassword = bcrypt.hashSync(password, salt);
 
@@ -78,9 +78,9 @@ router.post('/signup', isNotLoggedIn, validationLogin, (req, res, next) => {
 
 // POST '/auth/login'
 router.post('/login', isNotLoggedIn, validationLogin, (req, res, next) => {
-  const { username, password } = req.body;
+  const { email, password } = req.body;
 
-  User.findOne({ username })
+  User.findOne({ email })
     .then( (user) => {
       if (! user) {
         // If user with that username can't be found, respond with an error

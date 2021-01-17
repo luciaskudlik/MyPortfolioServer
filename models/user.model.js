@@ -2,9 +2,9 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
-  username: {type: String, required: true, unique: true},
+  username: {type: String, required: true},
   image: String,
-  occupation: {type: String, required: true, unique: true},
+  occupation: {type: String, required: true},
   email: {type: String, required: true, unique: true},
   portfolio: [{type: Schema.Types.ObjectId, ref: "Project"}],
   followers: [{type: Schema.Types.ObjectId, ref: "User"}],
