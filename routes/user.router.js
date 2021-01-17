@@ -10,6 +10,7 @@ const {isLoggedIn} = require("./../helpers/middlewares");
 
 router.get('/user', isLoggedIn, (req, res, next) => {
     const { _id } = req.session.currentUser;
+    console.log(_id)
 
     User.findById(_id)
         .then((user) => {
@@ -48,5 +49,60 @@ router.get('/user/:id', (req, res, next) => {
         })
 })
 
+//POST/api/user/follow/:id => to follow a specific user
+
+router.post('/user/follow/:id', (req, res, next) => {
+
+    const {id} = req.params;
+    const currentUserId = req.body.currentUserId;
+
+    console.log(currentUserId);
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        res
+          .status(400) //  Bad Request
+          .json({ message: "Specified id is not valid" });
+        return;
+      }
+
+
+    User.findByIdAndUpdate(id, {$push: {followers: currentUserId}} )
+        .then((updatedUser) => {
+            User.findByIdAndUpdate(currentUserId, {$push: {following: id}} )
+            .then(() => {
+                res.status(200).send("User updated succesfully.");
+            }).catch(() => { next(err)})
+        })
+        .catch((err) => { next(err)})
+        
+
+})
+
+//POST/api/user/follow/:id => to unfollow a specific user
+
+router.post('/user/unfollow/:id', (req, res, next) => {
+
+    const {id} = req.params;
+    const currentUserId = req.body.currentUserId;
+
+    console.log(currentUserId);
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        res
+          .status(400) //  Bad Request
+          .json({ message: "Specified id is not valid" });
+        return;
+      }
+
+
+    User.findByIdAndUpdate(id, {$pull: {followers: currentUserId}} )
+        .then((updatedUser) => {
+            User.findByIdAndUpdate(currentUserId, {$pull: {following: id}} )
+            .then(() => {
+                res.status(200).send("User updated succesfully.");
+            }).catch(() => { next(err)})
+        })
+        .catch((err) => { next(err)})
+        
+
+})
 
 module.exports = router;
