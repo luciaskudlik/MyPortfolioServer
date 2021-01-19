@@ -13,6 +13,7 @@ router.get('/user', isLoggedIn, (req, res, next) => {
     console.log(_id)
 
     User.findById(_id)
+        .populate("portfolio")
         .then((user) => {
             res.status(200).json(user);
         })
