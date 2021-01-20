@@ -4,7 +4,9 @@ const Schema = mongoose.Schema;
 const projectSchema = new Schema({
     title: {type: String, required: true},
     image: {type: String},
+    about: String,
     description: {type: String, required: true},
+    technologies: {type: String},
     deployedLink: {type: String, required: true},
     githubLink: {type: String, required: true},
     likedBy: [{type: Schema.Types.ObjectId, ref: "User"}],

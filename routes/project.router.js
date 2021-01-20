@@ -27,13 +27,15 @@ router.post("/upload", uploader.single("image"), (req, res, next) => {
 //POST 'api/projects'  => to post a new workshop
 
 router.post('/projects', isLoggedIn, (req, res, next) => {
-    const { title, image, description, deployedLink, githubLink, userId}= req.body;
+    const { title, image, about, description, technologies, deployedLink, githubLink, userId}= req.body;
 
   
     Project.create({
       title,
       image,
+      about,
       description,
+      technologies,
       deployedLink,
       githubLink,
       likedBy: [],
@@ -56,7 +58,23 @@ router.post('/projects', isLoggedIn, (req, res, next) => {
     });
   });
 
+  //DELETE 'api/projects/:id'  => to delete a project
 
+router.post('/projects/:id', (req, res, next) => {
+  console.log("ROUTE WAS CALLED")
+  const {id} = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    res
+      .status(400) //  Bad Request
+      .json({ message: "Specified id is not valid" });
+    return;
+  }
+
+  Project.findByIdAndRemove(id)
+    .then(() => res.status(200).send("Project deleted succesfully."))
+    .catch((err) => next(err))
+})
 
 
 
