@@ -58,6 +58,43 @@ router.post('/projects', isLoggedIn, (req, res, next) => {
     });
   });
 
+
+//PUT 'api/projects/:id'  => to edit an existing workshop
+
+router.put('/projects/:id', isLoggedIn, (req, res, next) => {
+  const { title, image, about, description, technologies, deployedLink, githubLink, userId}= req.body;
+  const {id} = req.params;
+
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    res
+      .status(400) //  Bad Request
+      .json({ message: "Specified id is not valid" });
+    return;
+  }
+
+  Project.findByIdAndUpdate(id, {
+    title,
+    image,
+    about,
+    description,
+    technologies,
+    deployedLink,
+    githubLink,
+    likedBy: [],
+    comments: [],
+  })
+  .then((updatedProject) => {
+    res.status(200).send("Project updated.");
+  
+  })
+  .catch((err) => {
+    next(err)
+  });
+});
+
+
+
   //DELETE 'api/projects/:id'  => to delete a project
 
 router.post('/projects/:id', (req, res, next) => {
