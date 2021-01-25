@@ -113,6 +113,22 @@ router.post('/projects/:id', (req, res, next) => {
     .catch((err) => next(err))
 })
 
+ //GET 'api/projects/:id'  => to get a specific project
+
+ router.get('/projects/:id', (req, res, next) => {
+  const {id}= req.params;
+
+  Project.findById(id)
+  .populate("comments")
+  .then((foundProject) => {
+      res.status(200).json(foundProject);
+  })
+  .catch((err) => {
+    next(err)
+  });
+});
+
+
 
 
 module.exports = router;
