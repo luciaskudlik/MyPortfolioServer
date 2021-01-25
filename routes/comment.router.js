@@ -52,6 +52,21 @@ router.post('/comments', isLoggedIn, (req, res, next) => {
   });
 
 
+  //POST 'api/comments/:id'  => to delete a specific comment
+
+  router.post('/comments/:id', (req, res, next) => {
+    const {id}= req.params;
+
+    Comment.findByIdAndDelete(id)
+    .then((deletedComment) => {
+        res.status(200).json(deletedComment);
+    })
+    .catch((err) => {
+      next(err)
+    });
+  });
+
+
 
 
 module.exports = router;
