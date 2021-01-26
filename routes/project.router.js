@@ -120,6 +120,7 @@ router.post('/projects/:id', (req, res, next) => {
 
   Project.findById(id)
   .populate("comments")
+  .populate("likedBy")
   .then((foundProject) => {
       res.status(200).json(foundProject);
   })
@@ -128,6 +129,36 @@ router.post('/projects/:id', (req, res, next) => {
   });
 });
 
+
+//POST 'api/projects/like/:id' => to like a specific project
+
+router.post('/projects/like/:id', (req, res, next) => {
+  const {userId}= req.body;
+  const {id} = req.params;
+    
+    Project.findByIdAndUpdate(id, {$push: {likedBy: userId}}, {new:true})
+        .then((updatedProject) => {
+          res.status(200).send("Project updated succesfully.");
+        })
+        .catch((err) =>  next(err))
+  
+});
+
+
+//POST 'api/projects/dislike/:id' => to dislike a specific project
+
+router.post('/projects/dislike/:id', (req, res, next) => {
+  const {userId}= req.body;
+  const {id} = req.params;
+
+    
+    Project.findByIdAndUpdate(id, {$pull: {likedBy: userId}}, {new:true})
+        .then((updatedProject) => {
+          res.status(200).send("Project updated succesfully.");
+        })
+        .catch((err) =>  next(err))
+  
+});
 
 
 
