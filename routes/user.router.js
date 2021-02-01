@@ -55,6 +55,22 @@ router.get('/user/:id', (req, res, next) => {
         })
 })
 
+//PUT/api/user/:id => to edit a specific user
+
+router.put('/user/:id', (req, res, next) => {
+
+    const {id} = req.params;
+    const {username, occupation} = req.body;
+
+    User.findByIdAndUpdate(id, {username, occupation})
+        .then((updatedUser) => {
+            res.status(200).json(updatedUser);
+        })
+        .catch((err) => {
+            next(err);
+        })
+})
+
 //POST/api/user/follow/:id => to follow a specific user
 
 router.post('/user/follow/:id', (req, res, next) => {
