@@ -16,6 +16,7 @@ router.get('/user', isLoggedIn, (req, res, next) => {
         .populate("portfolio")
         .populate("followers")
         .populate("following")
+        .populate("chats")
         .then((user) => {
             res.status(200).json(user);
         })

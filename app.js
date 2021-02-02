@@ -13,6 +13,8 @@ const authRouter = require('./routes/auth.router');
 const userRouter = require('./routes/user.router');
 const projectRouter = require('./routes/project.router');
 const commentRouter = require('./routes/comment.router');
+const chatRouter = require('./routes/chat.router');
+
 
 
 // MONGOOSE CONNECTION
@@ -28,6 +30,8 @@ mongoose
 
 // EXPRESS SERVER INSTANCE
 const app = express();
+
+
 
 // CORS MIDDLEWARE SETUP
 app.use(
@@ -66,6 +70,7 @@ app.use('/auth', authRouter);
 app.use('/api', userRouter);
 app.use('/api', projectRouter);
 app.use('/api', commentRouter);
+app.use('/api', chatRouter);
 
 
 

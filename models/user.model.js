@@ -10,6 +10,7 @@ const userSchema = new Schema({
   followers: [{type: Schema.Types.ObjectId, ref: "User"}],
   following: [{type: Schema.Types.ObjectId, ref: "User"}],
   password: {type: String, required: true},
+  chats: [{type: Schema.Types.ObjectId, ref:"Chat"}],
 }, {
   timestamps: {
     createdAt: 'created_at',
