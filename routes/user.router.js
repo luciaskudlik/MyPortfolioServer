@@ -48,6 +48,7 @@ router.get('/user/:id', (req, res, next) => {
         .populate("portfolio")
         .populate("followers")
         .populate("following")
+        .populate("chats")
         .then((foundUser) => {
             res.status(200).json(foundUser);
         })

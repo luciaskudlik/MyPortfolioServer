@@ -8,6 +8,7 @@ const messageSchema = new Schema({
     chat: {type: Schema.Types.ObjectId, ref:"Chat"},
     sentBy: {type: Schema.Types.ObjectId, ref:"User"},
     text: 'String',
+    seen: 'Boolean'
 
 }, {
   timestamps: {

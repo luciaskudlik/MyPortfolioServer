@@ -64,7 +64,7 @@ router.post("/message", (req, res, next)=>{
     const {chat, sentBy, text} = req.body;
     let messageId;  
 
-    Message.create({chat, sentBy, text})
+    Message.create({chat, sentBy, text, seen: false})
     .then((createdMessage)=>{
         messageId = createdMessage._id
         const pr = Chat.findByIdAndUpdate(chat, {$push:{messages: messageId}})
@@ -72,6 +72,26 @@ router.post("/message", (req, res, next)=>{
 
     }).then(()=>{
         res.status(200).json(messageId)
+    })
+    .catch(err =>{
+        next( createError(err) );
+
+    })
+})
+
+
+
+//PUT "/api/message/read/:id" to read a message
+
+router.put("/message/read/:id", (req, res, next)=>{
+
+    const {id} = req.params;
+    
+
+    Message.findByIdAndUpdate(id, {seen: true})
+    .then((updatedMessage)=>{
+        
+        res.status(200).json(updatedMessage)
     })
     .catch(err =>{
         next( createError(err) );
