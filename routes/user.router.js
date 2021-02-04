@@ -62,9 +62,9 @@ router.get('/user/:id', (req, res, next) => {
 router.put('/user/:id', (req, res, next) => {
 
     const {id} = req.params;
-    const {username, occupation} = req.body;
+    const {username, occupation, image} = req.body;
 
-    User.findByIdAndUpdate(id, {username, occupation})
+    User.findByIdAndUpdate(id, {username, occupation, image})
         .then((updatedUser) => {
             res.status(200).json(updatedUser);
         })
