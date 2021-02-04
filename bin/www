@@ -23,6 +23,99 @@ app.set("port", port);
 
 var server = http.createServer(app);
 
+/**************************SOCKET.IO/START********************************/
+
+const socketio = require("socket.io");
+const { isPrimitive } = require("util");
+const io = socketio(server, {
+  cors: {
+    origin: [
+      "http://localhost:3000",
+      "https://social-developer-platform.herokuapp.com",
+      "http://social-developer-platform.herokuapp.com",
+    ],
+    methods: ["GET", "POST"],
+    allowedHeaders: ["my-custom-header"],
+    credentials: true,
+  },
+});
+var clients = {};
+io.on("connect", (socket) => {
+  console.log("connected");
+
+  socket.on("join-main", ({ user }, callback) => {
+    socket.join("main");
+    clients[socket.id] = user;
+    console.log(user);
+
+    io.to("main").emit("online", { users: clients });
+    callback();
+  });
+
+  socket.on("join", ({ room, user }, callback) => {
+    console.log("joined");
+    socket.join(room);
+    // socket.join("main");
+    // socket.to("main").emit("online", { user: user });
+    callback();
+  });
+
+  socket.on("post", (message, callback) => {
+    console.log("posting");
+    socket.to("main").emit("postIncoming");
+    callback();
+  });
+
+  socket.on("sendMessage", (sendObj, callback) => {
+    console.log(sendObj);
+    socket
+      .to(sendObj.conversationId)
+      .emit("message", { text: sendObj.message }); //io.to(sendObj.conversationId).emit("message", { text: sendObj.message });
+    console.log("done");
+    callback();
+  });
+
+  socket.on("logout", () => {
+    delete clients[socket.id];
+    io.to("main").emit("online", { users: clients });
+  });
+
+  socket.on("leaveConversation", ({ room }, callback) => {
+    console.log("leave", room);
+    socket.leave(room);
+
+    callback();
+  });
+
+  socket.on("messageSeen", ({ room }, callback) => {
+    socket.to(room).emit("messageIsSeen");
+    callback();
+  });
+
+  socket.on("typing", ({ room, value }, callback) => {
+    if (value.length !== 0) {
+      socket.to(room).emit("type");
+    } else {
+      socket.to(room).emit("StopType");
+    }
+  });
+
+  socket.on("notification", (userId, callback) => {
+    console.log("notification", userId);
+
+    socket.broadcast.emit("notification", { userId });
+    callback();
+  });
+
+  socket.on("disconnect", () => {
+    delete clients[socket.id];
+    io.to("main").emit("online", { users: clients });
+    console.log("disconnected");
+  });
+});
+
+/**************************SOCKET.IO/END********************************/
+
 /**
  * Listen on provided port, on all network interfaces.
  */
