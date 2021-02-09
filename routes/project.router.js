@@ -62,11 +62,11 @@ router.post('/projects', isLoggedIn, (req, res, next) => {
 //PUT 'api/projects/:id'  => to edit an existing workshop
 
 router.put('/projects/:id', isLoggedIn, (req, res, next) => {
-  const { title, image, about, description, technologies, deployedLink, githubLink, comments, likedBy, userId}= req.body;
+  const { title, image, about, description, technologies, deployedLink, githubLink}= req.body;
   const {id} = req.params;
 
-console.log("COMMENTS", comments);
-console.log("LIKED BY", likedBy);
+// console.log("COMMENTS", comments);
+// console.log("LIKED BY", likedBy);
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
     res
@@ -83,8 +83,8 @@ console.log("LIKED BY", likedBy);
     technologies,
     deployedLink,
     githubLink,
-    likedBy,
-    comments,
+    // likedBy,
+    // comments,
   })
   .then((updatedProject) => {
     res.status(200).send("Project updated.");
